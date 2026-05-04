@@ -1,18 +1,27 @@
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '../../.env') });
+
 const { PrismaClient } = require('@prisma/client');
-const { Pool, neonConfig } = require('@neondatabase/serverless');
-const { PrismaNeon } = require('@prisma/adapter-neon');
-const ws = require('ws');
+const { Pool } = require('pg');
+const { PrismaPg } = require('@prisma/adapter-pg');
 
-// Configure Neon for WebSocket usage
-neonConfig.webSocketConstructor = ws;
+const connectionString = (process.env.DATABASE_URL || '').trim();
 
-const connectionString = process.env.DATABASE_URL;
+if (!connectionString) {
+  console.error('❌ DATABASE_URL is missing from process.env');
+  process.exit(1);
+}
+
+const masked = connectionString.replace(/:([^:@]+)@/, ':****@');
+console.log(`🔌 DB connected: ${masked.substring(0, 50)}...`);
+
+// Standard pg Pool — works perfectly with Neon over TCP
 const pool = new Pool({ connectionString });
-const adapter = new PrismaNeon(pool);
+const adapter = new PrismaPg(pool);
 
-const prisma = new PrismaClient({ 
+const prisma = new PrismaClient({
   adapter,
-  log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
+  log: process.env.NODE_ENV === 'development' ? ['error', 'warn'] : ['error'],
 });
 
 module.exports = prisma;
