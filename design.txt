@@ -1,0 +1,216 @@
+Theme Name: "Frosted Productivity"
+
+Not dark. Not light. Not material design. Not boring SaaS blue.
+
+Think: Notion meets Linear meets Vercel's dashboard
+— clean, airy, glassmorphism accents,
+  subtle depth, feels premium without being heavy
+
+Primary Background:   #F4F2EE  (warm off-white, not pure white)
+Secondary Background: #EDEAE4  (slightly darker warm gray)
+Card Background:      rgba(255, 255, 255, 0.7) (semi-transparent white)
+Sidebar Background:   #1C1C1F  (near black, not pure black)
+
+Accent Color 1:  #6E56CF  (muted violet/purple — modern, not loud)
+Accent Color 2:  #00A86B  (emerald green — for done/success states)
+Accent Color 3:  #F59E0B  (warm amber — for warnings/in-progress)
+Accent Color 4:  #EF4444  (soft red — for high priority/overdue)
+
+Primary Text:    #1C1C1F  (near black — readable but not harsh)
+Secondary Text:  #6B7280  (cool gray — for subtitles, meta info)
+Muted Text:      #9CA3AF  (light gray — timestamps, placeholders)
+
+Border Color:    rgba(0, 0, 0, 0.08) (very subtle, barely visible)
+Shadow:          0 2px 12px rgba(0, 0, 0, 0.06)
+
+Heading Font:    "Inter" — weight 600-700
+Body Font:       "Inter" — weight 400-500
+Mono (for tags): "JetBrains Mono" or "Fira Code"
+
+Font Scale:
+  Page Title:    28px / 700
+  Section Head:  16px / 600
+  Card Title:    14px / 600
+  Body Text:     14px / 400
+  Meta/Time:     12px / 400 — muted color
+  
+Letter spacing on headings: -0.02em (tight, modern feel)
+Line height body: 1.6
+
+Task Card:
+  background: rgba(255, 255, 255, 0.75)
+  backdrop-filter: blur(12px)
+  border: 1px solid rgba(255, 255, 255, 0.9)
+  border-radius: 12px
+  padding: 16px
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05)
+  
+  On Hover:
+    transform: translateY(-2px)
+    box-shadow: 0 8px 24px rgba(0,0,0,0.10)
+    transition: all 0.2s ease
+
+  Left border accent (priority indicator):
+    High:   3px solid #EF4444
+    Medium: 3px solid #F59E0B
+    Low:    3px solid #00A86B
+
+┌────────────────────────────────────────────┐
+│  SIDEBAR (240px)    │  MAIN CONTENT        │
+│  bg: #1C1C1F        │  bg: #F4F2EE         │
+│  text: white        │                      │
+│                     │  ┌──────────────┐    │
+│  • Dashboard        │  │ Header Bar   │    │
+│  • My Tasks         │  │ + Filter Row │    │
+│  • Projects         │  └──────────────┘    │
+│  • Calendar         │                      │
+│  • Completed        │  ┌────┐ ┌────┐ ┌──┐ │
+│                     │  │Card│ │Card│ │  │ │
+│  ──────────────     │  └────┘ └────┘ └──┘ │
+│  Tags               │                      │
+│  • Work             │  Kanban / List /      │
+│  • Personal         │  Calendar view       │
+│  • Urgent           │                      │
+└────────────────────────────────────────────┘
+
+BUTTONS:
+  Primary:
+    background: #6E56CF
+    color: white
+    border-radius: 8px
+    padding: 8px 16px
+    font-weight: 600
+    hover: background darken 8%, slight scale(1.02)
+    
+  Secondary:
+    background: transparent
+    border: 1px solid rgba(0,0,0,0.12)
+    color: #1C1C1F
+    hover: background rgba(0,0,0,0.04)
+
+  Ghost/Icon Button:
+    background: transparent
+    hover: background rgba(110,86,207,0.08)
+    border-radius: 6px
+
+INPUT FIELDS:
+  background: rgba(255,255,255,0.8)
+  border: 1.5px solid rgba(0,0,0,0.10)
+  border-radius: 10px
+  padding: 10px 14px
+  focus: border-color #6E56CF
+         box-shadow: 0 0 0 3px rgba(110,86,207,0.12)
+  transition: all 0.15s ease
+
+TAGS / BADGES:
+  border-radius: 999px (pill shape)
+  padding: 3px 10px
+  font-size: 11px
+  font-weight: 600
+  
+  Work tag:     bg #EDE9FF  text #6E56CF
+  Personal tag: bg #D1FAE5  text #00A86B
+  Urgent tag:   bg #FEF3C7  text #D97706
+  Done tag:     bg #F3F4F6  text #9CA3AF
+
+CHECKBOX:
+  Unchecked: border 2px solid #D1D5DB, border-radius 5px
+  Checked:   background #6E56CF, checkmark white
+  Animation: scale bounce on check
+
+PRIORITY DOT:
+  Small 8px circle
+  High: #EF4444
+  Medium: #F59E0B  
+  Low: #00A86B
+
+SIDEBAR ACTIVE STATE:
+  background: rgba(255,255,255,0.10)
+  border-left: 3px solid #6E56CF
+  border-radius: 0 8px 8px 0
+
+Page Load:
+  Cards fade in with stagger — each card
+  delays 50ms more than previous
+  opacity 0→1, translateY 8px→0
+  duration: 0.3s ease-out
+
+Task Complete:
+  Checkbox bounces on click
+  Task title gets strikethrough with fade
+  Card slides out smoothly
+  Small confetti burst (optional)
+
+Drag and Drop (Kanban):
+  Dragging card gets slight rotation (-2deg)
+  Drop zone highlights with dashed border
+  in accent color
+  Smooth reorder animation
+
+Button Click:
+  scale(0.97) on mousedown
+  scale(1.02) on mouseup
+  duration: 0.1s
+
+Sidebar hover items:
+  Smooth background fill from left
+  duration: 0.15s ease
+
+Add Task Modal:
+  Slides up from bottom with blur overlay
+  backdrop-filter: blur(4px) on background
+
+Use glass effect ONLY on:
+  - Floating action button
+  - Modal/dialog boxes
+  - Notification toasts
+  - Top navigation bar (when scrolled)
+
+Glass Recipe:
+  background: rgba(255, 255, 255, 0.65)
+  backdrop-filter: blur(16px) saturate(180%)
+  border: 1px solid rgba(255, 255, 255, 0.85)
+  border-radius: 16px
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08)
+
+DO NOT use glass on every card —
+it loses the effect and looks cheap
+
+
+Empty State:
+  Centered illustration (simple SVG line art)
+  Heading: "No tasks yet" — 600 weight
+  Subtext: "Add your first task to get started" — muted
+  CTA button below
+
+Skeleton Loading:
+  bg: linear-gradient(
+    90deg,
+    #F4F2EE 25%,
+    #EDEAE4 50%,
+    #F4F2EE 75%
+  )
+  background-size: 200% 100%
+  animation: shimmer 1.5s infinite
+  border-radius matches actual content
+
+Toast Notifications:
+  Bottom right corner
+  Glass background
+  Slide in from right
+  Auto dismiss 3s
+  Success: left border #00A86B
+  Error: left border #EF4444
+
+Desktop (1200px+):
+  Sidebar visible + full kanban board
+
+Tablet (768px - 1199px):
+  Sidebar collapses to icon-only (48px)
+  List view default
+
+Mobile (< 768px):
+  Sidebar becomes bottom navigation bar
+  Single column list view
+  FAB (Floating Action Button) for add task
+  Full screen modal for task detail
