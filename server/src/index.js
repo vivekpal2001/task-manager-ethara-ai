@@ -4,7 +4,6 @@ const cors = require('cors');
 const { errorHandler } = require('./middleware/errorHandler');
 const authRoutes = require('./routes/auth.routes');
 const projectRoutes = require('./routes/project.routes');
-const userRoutes = require('./routes/user.routes');
 const taskRoutes = require('./routes/task.routes');
 const dashboardRoutes = require('./routes/dashboard.routes');
 
@@ -38,7 +37,6 @@ app.get('/api/health', (req, res) => {
 // ─── API Routes ───────────────────────────────────────────
 app.use('/api/auth', authRoutes);
 app.use('/api/projects', projectRoutes);
-app.use('/api/users', userRoutes);
 app.use('/api/projects/:projectId/tasks', taskRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 
@@ -61,7 +59,6 @@ app.listen(PORT, () => {
   console.log(`📋 Health check:    http://localhost:${PORT}/api/health`);
   console.log(`🔐 Auth routes:     http://localhost:${PORT}/api/auth`);
   console.log(`📁 Project routes:  http://localhost:${PORT}/api/projects`);
-  console.log(`👤 User routes:     http://localhost:${PORT}/api/users`);
   console.log(`📝 Task routes:     http://localhost:${PORT}/api/projects/:id/tasks`);
   console.log(`📊 Dashboard:       http://localhost:${PORT}/api/dashboard\n`);
 });

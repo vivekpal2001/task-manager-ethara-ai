@@ -31,10 +31,10 @@ TaskManager/
 ## 🏗️ Build Phases
 
 - [x] **Phase 1** — Auth, DB Schema, JWT
-- [ ] **Phase 2** — Projects & Team Management
-- [ ] **Phase 3** — Tasks CRUD & Assignment
-- [ ] **Phase 4** — React Frontend + Dashboard
-- [ ] **Phase 5** — Polish, Animations, Analytics
+- [x] **Phase 2** — Projects & Team Management
+- [x] **Phase 3** — Tasks CRUD & Assignment
+- [x] **Phase 4** — React Frontend + Dashboard
+- [x] **Phase 5** — Polish, Kanban, Animations, Analytics
 
 ## 🔧 Setup
 

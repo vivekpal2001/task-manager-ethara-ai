@@ -57,10 +57,6 @@ export const taskAPI = {
   delete: (projectId, taskId) => api.delete(`/projects/${projectId}/tasks/${taskId}`),
 };
 
-// ─── Users ────────────────────────────────────────────────
-export const userAPI = {
-  search: (query) => api.get('/users', { params: { search: query } }),
-};
 
 // ─── Dashboard ────────────────────────────────────────────
 export const dashboardAPI = {

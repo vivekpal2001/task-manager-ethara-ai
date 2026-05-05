@@ -188,12 +188,20 @@
 .auth-error {
   background: #FEE2E2;
   color: #EF4444;
-  padding: 10px 14px;
-  border-radius: 8px;
+  padding: 12px 16px;
+  border-radius: 10px;
   font-size: 13px;
   font-weight: 500;
-  margin-bottom: 16px;
-  text-align: center;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  line-height: 1.4;
+}
+
+.auth-error .error-icon {
+  flex-shrink: 0;
 }
 
 /* Password field with toggle */

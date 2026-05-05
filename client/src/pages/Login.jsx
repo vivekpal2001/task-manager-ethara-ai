@@ -9,6 +9,7 @@ import {
   Zap,
   BarChart3,
   CheckCircle,
+  AlertCircle,
 } from 'lucide-react';
 import './Auth.css';
 
@@ -29,7 +30,10 @@ export default function Login() {
       await login(email, password);
       navigate('/dashboard');
     } catch (err) {
-      setError(err.response?.data?.message || 'Login failed');
+      setError(
+        err.response?.data?.message || 
+        (err.message === 'Network Error' ? 'Unable to connect to the server. Please check your internet.' : 'Login failed')
+      );
     } finally {
       setLoading(false);
     }
@@ -71,7 +75,12 @@ export default function Login() {
           </div>
 
           <form onSubmit={handleSubmit} className="auth-form">
-            {error && <div className="auth-error">{error}</div>}
+            {error && (
+              <div className="auth-error animate-fadeInUp">
+                <AlertCircle size={16} className="error-icon" />
+                <span>{error}</span>
+              </div>
+            )}
 
             <div className="input-group">
               <label className="input-label" htmlFor="login-email">Email</label>

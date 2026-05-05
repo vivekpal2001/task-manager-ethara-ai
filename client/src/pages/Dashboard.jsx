@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { dashboardAPI } from '../api';
 import { useAuth } from '../context/AuthContext';
+import Toast from '../components/Toast';
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 import {
   FolderKanban,
   CheckSquare,
@@ -20,10 +22,17 @@ export default function Dashboard() {
   const { user } = useAuth();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [toast, setToast] = useState(null);
 
   useEffect(() => {
     dashboardAPI.get()
-      .then((res) => setData(res.data.data))
+      .then((res) => {
+        const dashboardData = res.data.data;
+        setData(dashboardData);
+        if (dashboardData.overdueCount > 0) {
+          setToast({ message: `You have ${dashboardData.overdueCount} overdue tasks!`, type: 'error' });
+        }
+      })
       .catch(console.error)
       .finally(() => setLoading(false));
   }, []);
@@ -126,33 +135,56 @@ export default function Dashboard() {
             </span>
           </div>
 
-          <div className="progress-bar-wrapper">
-            <div className="progress-bar">
-              {stats.total > 0 && (
-                <>
-                  <div className="progress-segment progress-done"
-                    style={{ width: `${(stats.DONE / stats.total) * 100}%` }} />
-                  <div className="progress-segment progress-in-progress"
-                    style={{ width: `${(stats.IN_PROGRESS / stats.total) * 100}%` }} />
-                  <div className="progress-segment progress-todo"
-                    style={{ width: `${(stats.TODO / stats.total) * 100}%` }} />
-                </>
-              )}
-            </div>
+          <div className="progress-bar-wrapper" style={{ height: '160px' }}>
+            {stats.total > 0 ? (
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={[
+                      { name: 'Done', value: stats.DONE || 0, color: '#00A86B' },
+                      { name: 'In Progress', value: stats.IN_PROGRESS || 0, color: '#F59E0B' },
+                      { name: 'To Do', value: stats.TODO || 0, color: '#D1D5DB' }
+                    ].filter(d => d.value > 0)}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={45}
+                    outerRadius={70}
+                    dataKey="value"
+                    stroke="none"
+                  >
+                    { [
+                        { name: 'Done', value: stats.DONE || 0, color: '#00A86B' },
+                        { name: 'In Progress', value: stats.IN_PROGRESS || 0, color: '#F59E0B' },
+                        { name: 'To Do', value: stats.TODO || 0, color: '#D1D5DB' }
+                      ].filter(d => d.value > 0).map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    contentStyle={{ borderRadius: '12px', border: '1px solid rgba(0,0,0,0.1)', background: 'rgba(255,255,255,0.9)', backdropFilter: 'blur(10px)' }}
+                    itemStyle={{ color: '#1C1C1F', fontWeight: 500 }}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+            ) : (
+              <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#9CA3AF', fontSize: 13 }}>
+                No tasks to analyze
+              </div>
+            )}
           </div>
 
           <div className="progress-legend">
             <span className="legend-item">
               <span className="legend-dot done" />
-              Done <span className="legend-value">{stats.DONE}</span>
+              Done <span className="legend-value">{stats.DONE || 0}</span>
             </span>
             <span className="legend-item">
               <span className="legend-dot in-progress" />
-              In Progress <span className="legend-value">{stats.IN_PROGRESS}</span>
+              In Progress <span className="legend-value">{stats.IN_PROGRESS || 0}</span>
             </span>
             <span className="legend-item">
               <span className="legend-dot todo" />
-              To Do <span className="legend-value">{stats.TODO}</span>
+              To Do <span className="legend-value">{stats.TODO || 0}</span>
             </span>
           </div>
         </div>
@@ -246,6 +278,7 @@ export default function Dashboard() {
           )}
         </div>
       </div>
+      {toast && <Toast {...toast} onClose={() => setToast(null)} />}
     </div>
   );
 }

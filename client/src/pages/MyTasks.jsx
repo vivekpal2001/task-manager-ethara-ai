@@ -7,6 +7,7 @@ export default function MyTasks() {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
+  const [priorityFilter, setPriorityFilter] = useState('all');
 
   useEffect(() => {
     dashboardAPI.get()
@@ -15,7 +16,11 @@ export default function MyTasks() {
       .finally(() => setLoading(false));
   }, []);
 
-  const filtered = filter === 'all' ? tasks : tasks.filter((t) => t.status === filter);
+  const filtered = tasks.filter((t) => {
+    if (filter !== 'all' && t.status !== filter) return false;
+    if (priorityFilter !== 'all' && t.priority !== priorityFilter) return false;
+    return true;
+  });
 
   if (loading) {
     return (
@@ -35,6 +40,20 @@ export default function MyTasks() {
           <h1>My Tasks</h1>
           <p className="text-secondary">{tasks.length} task{tasks.length !== 1 ? 's' : ''} assigned to you</p>
         </div>
+      </div>
+
+      <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '16px' }}>
+        <select
+          className="filter-select"
+          style={{ padding: '6px 12px', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'var(--bg-card)' }}
+          value={priorityFilter}
+          onChange={(e) => setPriorityFilter(e.target.value)}
+        >
+          <option value="all">All Priorities</option>
+          <option value="HIGH">High</option>
+          <option value="MEDIUM">Medium</option>
+          <option value="LOW">Low</option>
+        </select>
       </div>
 
       {/* Filter Tabs */}

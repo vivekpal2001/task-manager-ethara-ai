@@ -36,6 +36,7 @@ export default function ProjectDetail() {
   const [showAddMember, setShowAddMember] = useState(false);
   const [editingTask, setEditingTask] = useState(null);
   const [statusFilter, setStatusFilter] = useState('');
+  const [priorityFilter, setPriorityFilter] = useState('');
   const [toast, setToast] = useState(null);
   const [viewMode, setViewMode] = useState('board');
 
@@ -44,9 +45,13 @@ export default function ProjectDetail() {
 
   const fetchData = async () => {
     try {
+      const queryParams = {};
+      if (statusFilter) queryParams.status = statusFilter;
+      if (priorityFilter) queryParams.priority = priorityFilter;
+
       const [projRes, taskRes] = await Promise.all([
         projectAPI.getOne(projectId),
-        taskAPI.getAll(projectId, statusFilter ? { status: statusFilter } : {}),
+        taskAPI.getAll(projectId, queryParams),
       ]);
       setProject(projRes.data.data.project);
       setTaskStats(projRes.data.data.taskStats);
@@ -62,7 +67,7 @@ export default function ProjectDetail() {
     }
   };
 
-  useEffect(() => { fetchData(); }, [projectId, statusFilter]);
+  useEffect(() => { fetchData(); }, [projectId, statusFilter, priorityFilter]);
 
   // ── Task Handlers ────────────────────────────────────────
   const handleCreateTask = async (e) => {
@@ -196,6 +201,13 @@ export default function ProjectDetail() {
 
   const totalTasks = (taskStats.TODO || 0) + (taskStats.IN_PROGRESS || 0) + (taskStats.DONE || 0);
 
+  const eligibleAssignees = [
+    { id: project.ownerId, name: `${project.owner?.name} (Owner)` },
+    ...members
+      .filter((m) => m.userId !== project.ownerId)
+      .map((m) => ({ id: m.userId, name: m.user?.name })),
+  ];
+
   return (
     <div className="project-detail">
       {/* Header */}
@@ -269,10 +281,20 @@ export default function ProjectDetail() {
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value)}
                 >
-                  <option value="">All</option>
+                  <option value="">All Statuses</option>
                   <option value="TODO">To Do</option>
                   <option value="IN_PROGRESS">In Progress</option>
                   <option value="DONE">Done</option>
+                </select>
+                <select
+                  className="filter-select"
+                  value={priorityFilter}
+                  onChange={(e) => setPriorityFilter(e.target.value)}
+                >
+                  <option value="">All Priorities</option>
+                  <option value="HIGH">High</option>
+                  <option value="MEDIUM">Medium</option>
+                  <option value="LOW">Low</option>
                 </select>
               </div>
             </div>
@@ -441,8 +463,8 @@ export default function ProjectDetail() {
               <label className="input-label">Assign To</label>
               <select name="assigneeId" className="input-field">
                 <option value="">Unassigned</option>
-                {members.map((m) => (
-                  <option key={m.userId} value={m.userId}>{m.user?.name}</option>
+                {eligibleAssignees.map((assignee) => (
+                  <option key={assignee.id} value={assignee.id}>{assignee.name}</option>
                 ))}
               </select>
             </div>
@@ -493,8 +515,8 @@ export default function ProjectDetail() {
                 <label className="input-label">Assign To</label>
                 <select name="assigneeId" className="input-field" defaultValue={editingTask.assigneeId || ''}>
                   <option value="">Unassigned</option>
-                  {members.map((m) => (
-                    <option key={m.userId} value={m.userId}>{m.user?.name}</option>
+                  {eligibleAssignees.map((assignee) => (
+                    <option key={assignee.id} value={assignee.id}>{assignee.name}</option>
                   ))}
                 </select>
               </div>
