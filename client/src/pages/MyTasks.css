@@ -1,0 +1,113 @@
+/* ─── My Tasks Page ──────────────────────────────────────── */
+.my-tasks-page {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+/* Tab Filter */
+.task-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 4px;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.tab-btn:hover {
+  color: var(--text-primary);
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.tab-btn.active {
+  background: var(--accent-purple);
+  color: var(--text-white);
+}
+
+.tab-count {
+  font-size: 11px;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 1px 6px;
+  border-radius: var(--radius-pill);
+}
+
+.tab-btn:not(.active) .tab-count {
+  background: var(--bg-secondary);
+}
+
+/* Full Task List */
+.my-full-task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.my-full-task {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-left: 3px solid transparent;
+}
+
+.my-full-task.task-priority-HIGH { border-left-color: var(--accent-red); }
+.my-full-task.task-priority-MEDIUM { border-left-color: var(--accent-amber); }
+.my-full-task.task-priority-LOW { border-left-color: var(--accent-green); }
+
+.my-task-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.my-task-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.my-task-title {
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.my-task-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 640px) {
+  .my-full-task {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .task-tabs {
+    flex-wrap: wrap;
+  }
+
+  .tab-btn {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+}

@@ -1,0 +1,38 @@
+/* ─── App Layout ─────────────────────────────────────────── */
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  margin-left: var(--sidebar-width);
+  padding: 32px 40px;
+  min-height: 100vh;
+  background: var(--bg-primary);
+  transition: margin-left var(--transition-normal);
+}
+
+.loading-screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: var(--bg-primary);
+}
+
+/* Tablet: icon-only sidebar */
+@media (min-width: 769px) and (max-width: 1199px) {
+  .main-content {
+    margin-left: var(--sidebar-collapsed);
+  }
+}
+
+/* Mobile: no sidebar margin */
+@media (max-width: 768px) {
+  .main-content {
+    margin-left: 0;
+    padding: 24px 16px;
+    padding-top: 56px; /* Space for mobile toggle */
+  }
+}
