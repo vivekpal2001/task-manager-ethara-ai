@@ -1,0 +1,71 @@
+/* ─── Kanban Board ─────────────────────────────────────────── */
+
+.kanban-board {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  padding-bottom: 12px;
+}
+
+.kanban-column {
+  flex: 1;
+  min-width: 280px;
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  display: flex;
+  flex-direction: column;
+}
+
+.kanban-column-header {
+  padding: 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.kanban-column-header h3 {
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+}
+
+.kanban-count {
+  background: rgba(110, 86, 207, 0.1);
+  color: #6E56CF;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+}
+
+.kanban-droppable {
+  flex: 1;
+  padding: 12px;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border-radius: 0 0 16px 16px;
+  transition: background-color 0.2s ease;
+}
+
+.kanban-droppable.dragging-over {
+  background: rgba(110, 86, 207, 0.05);
+  border: 1px dashed rgba(110, 86, 207, 0.3);
+}
+
+/* Kanban Dragging State */
+.task-card.is-dragging {
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+  cursor: grabbing !important;
+  opacity: 0.95;
+}
+
+@media (max-width: 768px) {
+  .kanban-board {
+    flex-direction: column;
+  }
+}

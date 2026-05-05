@@ -15,7 +15,10 @@ import {
   Circle,
   Clock,
   Filter,
+  LayoutList,
+  Kanban
 } from 'lucide-react';
+import KanbanBoard from '../components/KanbanBoard';
 import './ProjectDetail.css';
 
 export default function ProjectDetail() {
@@ -34,6 +37,7 @@ export default function ProjectDetail() {
   const [editingTask, setEditingTask] = useState(null);
   const [statusFilter, setStatusFilter] = useState('');
   const [toast, setToast] = useState(null);
+  const [viewMode, setViewMode] = useState('board');
 
   const isAdmin = project?.ownerId === user?.id ||
     members.some(m => m.userId === user?.id && m.role === 'ADMIN');
@@ -121,6 +125,22 @@ export default function ProjectDetail() {
       fetchData();
     } catch (err) {
       setToast({ message: err.response?.data?.message || 'Cannot update', type: 'error' });
+    }
+  };
+
+  const handleKanbanTaskUpdate = async (task, newStatus) => {
+    try {
+      setTasks(prev => prev.map(t => t.id === task.id ? { ...t, status: newStatus } : t));
+      setTaskStats(prev => {
+        const stats = { ...prev };
+        stats[task.status] = Math.max(0, (stats[task.status] || 1) - 1);
+        stats[newStatus] = (stats[newStatus] || 0) + 1;
+        return stats;
+      });
+      await taskAPI.update(projectId, task.id, { status: newStatus });
+    } catch (err) {
+      setToast({ message: err.response?.data?.message || 'Cannot update', type: 'error' });
+      fetchData();
     }
   };
 
@@ -233,23 +253,34 @@ export default function ProjectDetail() {
         <div className="tasks-column animate-fadeInUp" style={{ animationDelay: '200ms' }}>
           <div className="tasks-header">
             <h3>Tasks ({tasks.length})</h3>
-            <div className="filter-bar">
-              <Filter size={14} />
-              <select
-                className="filter-select"
-                value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value)}
-              >
-                <option value="">All</option>
-                <option value="TODO">To Do</option>
-                <option value="IN_PROGRESS">In Progress</option>
-                <option value="DONE">Done</option>
-              </select>
+            <div className="tasks-header-actions">
+              <div className="view-toggle">
+                <button className={`btn-icon ${viewMode === 'list' ? 'active' : ''}`} onClick={() => setViewMode('list')} title="List View">
+                  <LayoutList size={16} />
+                </button>
+                <button className={`btn-icon ${viewMode === 'board' ? 'active' : ''}`} onClick={() => setViewMode('board')} title="Board View">
+                  <Kanban size={16} />
+                </button>
+              </div>
+              <div className="filter-bar">
+                <Filter size={14} />
+                <select
+                  className="filter-select"
+                  value={statusFilter}
+                  onChange={(e) => setStatusFilter(e.target.value)}
+                >
+                  <option value="">All</option>
+                  <option value="TODO">To Do</option>
+                  <option value="IN_PROGRESS">In Progress</option>
+                  <option value="DONE">Done</option>
+                </select>
+              </div>
             </div>
           </div>
 
           {tasks.length > 0 ? (
-            <div className="task-list stagger-children">
+            viewMode === 'list' ? (
+              <div className="task-list stagger-children">
               {tasks.map((task) => (
                 <div key={task.id} className={`task-card card task-priority-${task.priority}`}>
                   <div className="task-card-top">
@@ -312,6 +343,18 @@ export default function ProjectDetail() {
                 </div>
               ))}
             </div>
+            ) : (
+              <div className="kanban-view animate-fadeInUp">
+                <KanbanBoard 
+                  tasks={tasks} 
+                  onTaskUpdate={handleKanbanTaskUpdate}
+                  onTaskEdit={setEditingTask}
+                  onTaskDelete={handleDeleteTask}
+                  isAdmin={isAdmin}
+                  user={user}
+                />
+              </div>
+            )
           ) : (
             <div className="empty-state">
               <CheckCircle size={36} className="empty-icon" />
