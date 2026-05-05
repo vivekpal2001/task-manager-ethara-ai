@@ -11,7 +11,22 @@ const app = express();
 
 // ─── Core Middleware ──────────────────────────────────────
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:5173',
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like curl) or localhost
+    if (!origin || origin.startsWith('http://localhost:')) {
+      return callback(null, true);
+    }
+    
+    // Allow explicitly defined CLIENT_URL or any Vercel domain
+    if (
+      origin === process.env.CLIENT_URL || 
+      origin.endsWith('.vercel.app')
+    ) {
+      return callback(null, true);
+    }
+    
+    callback(new Error('Not allowed by CORS'));
+  },
   credentials: true,
 }));
 app.use(express.json({ limit: '10mb' }));
